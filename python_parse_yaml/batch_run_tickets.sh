@@ -45,7 +45,7 @@ for data in "${dataset[@]}"; do
     cd DR_${ticket_id}_${folder_name}
 
     ## copy yaml in each dir
-    #cp $path_to_yaml/*.yaml .
+    #cp ${path_to_yaml}/*.yaml .
     cp $HOME_DIR/test.yaml .    ##sample file copy here
 
 
