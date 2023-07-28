@@ -1,0 +1,6 @@
+For json based script:
+    jq
+    pyyaml
+
+For yaml based script:
+    pyyaml

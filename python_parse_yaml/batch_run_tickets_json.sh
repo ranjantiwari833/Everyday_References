@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###############
-# Usage: ./batch_run_tickets.sh
+# Usage: ./batch_run_tickets_json.sh data.json
 ###############
 set -e
 
@@ -16,39 +16,36 @@ handle_error() {
 trap 'handle_error "$BASH_COMMAND"' ERR
 ###############
 
-source data.sh
-
-OLD_IFS=$IFS    ## internal field separator
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NOCOLOR='\033[0m'
 
 ## go to working dir
 HOME_DIR=$(pwd)
+readarray -t data_array < <(jq --compact-output '.[]' $1)
+
 mkdir -p Test_dir
 TEST_DIR=$HOME_DIR/Test_dir
 cd $TEST_DIR
 
-# sudo rm -rf *  ## use this with care, will delete everything in the directory and sub-directories 
+# sudo rm -rf *  ## use this with care, will delete everything in the directory and sub-directories
 
-for data in "${dataset[@]}"; do
-    IFS=','
-    set $data
-    ticket_id=$1
-    path_to_yaml=$2
-    folder_name=$3
+for data in "${data_array[@]}";do
+    ticket_id=$(jq -r '.ticket_id' <<< $data)
+    yaml_path=$(jq -r '.yaml_path' <<< $data)
+    dir_name=$(jq -r '.dir_name' <<< $data)
     
     echo -e "${GREEN}Processing the following dataset:${NOCOLOR}"
-    echo "TicketId: $ticket_id"
-    echo "Path To Yaml: $path_to_yaml"
-    echo "Customer Directory Name: $folder_name"
+    echo "TicketId: ${ticket_id}"
+    echo "Path To Yaml: ${yaml_path}"
+    echo "Customer Directory Name: ${dir_name}"
 
     ## create dir for each ticket (DR_ticketID_foldername_given)
-    mkdir DR_${ticket_id}_${folder_name}
-    cd DR_${ticket_id}_${folder_name}
+    mkdir DR_${ticket_id}_${dir_name}
+    cd DR_${ticket_id}_${dir_name}
 
     ## copy yaml in each dir
-    #cp ${path_to_yaml}/*.yaml .
+    #cp ${yaml_path}/*.yaml .
     cp $HOME_DIR/test.yaml .    ##sample file copy here
 
 
@@ -61,4 +58,3 @@ for data in "${dataset[@]}"; do
     cd ${TEST_DIR}
 
 done
-IFS=$OLD_IFS

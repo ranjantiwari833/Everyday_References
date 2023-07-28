@@ -1,0 +1,17 @@
+[
+    {
+        "ticket_id" : 123,
+        "yaml_path" : "path_to_yaml1",
+        "dir_name"  : "Sample_Dir1"
+    },
+    {
+        "ticket_id" : 456,
+        "yaml_path" : "path_to_yaml2",
+        "dir_name"  : "Sample_Dir2"
+    },
+    {
+        "ticket_id" : 789,
+        "yaml_path" : "path_to_yaml3",
+        "dir_name"  : "Sample_Dir3"
+    }
+]
